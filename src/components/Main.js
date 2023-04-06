@@ -4,6 +4,7 @@ import { selectCurrentUser } from "../selectors/userSelector";
 import PostModal from "./PostModal";
 import { setIsModalOpen } from "../actions/modalActions";
 import { selectIsModalOpen } from "../selectors/modalSelector";
+import Spinner from "./Spinner";
 
 const Container = styled.div`
   grid-area: main;

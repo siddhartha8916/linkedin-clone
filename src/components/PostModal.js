@@ -1,11 +1,15 @@
 import styled from "styled-components";
 import ReactDOM from "react-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { ToastContainer, toast } from 'react-toastify';
 import { setIsModalOpen } from "../actions/modalActions";
 import { useState } from "react";
 import { selectCurrentUser } from "../selectors/userSelector";
 import ReactPlayer from "react-player";
 import { postArticleAPI } from "../actions/articleActions";
+import { isArticleLoading, isArticlePostSuccess } from "../selectors/articleSelector";
+import Spinner from "./Spinner";
+import { useEffect } from "react";
 
 const Container = styled.div`
   position: fixed;
@@ -186,17 +190,26 @@ const PostModal = (props) => {
   const dispatch = useDispatch();
 
   const currentUser = useSelector(selectCurrentUser);
+  const isLoading = useSelector(isArticleLoading)
+  const isArticleSuccess = useSelector(isArticlePostSuccess)
 
   const [editorText, setEditorText] = useState("");
   const [shareImage, setShareImage] = useState("");
   const [videoLink, setVideoLink] = useState("");
   const [assetArea, setAssetArea] = useState("");
 
-  const postArticle = (event) => {
+  useEffect(() => {
+    if (isArticleSuccess) {
+      toast("Article Posted Successfully!");
+    }
+  }, [isArticleSuccess])
+
+  const postArticle = async (event) => {
     event.preventDefault();
 
     if (event.target!== event.currentTarget) return;
     const payload = {
+      id:crypto.randomUUID(),
       image:shareImage,
       video:videoLink,
       user:currentUser,
@@ -204,8 +217,7 @@ const PostModal = (props) => {
       timestamp:Date.now(),
     }
     reset(event)
-    dispatch(postArticleAPI(payload))
-
+    dispatch(postArticleAPI(payload));
   }
 
   const reset = (e) => {
@@ -239,6 +251,8 @@ const PostModal = (props) => {
 
   const ModalContent = (
     <Container>
+      <ToastContainer />
+      {isLoading && <Spinner/>}
       <Content>
         <Header>
           <h2>Create a Post</h2>

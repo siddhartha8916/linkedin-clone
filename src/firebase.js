@@ -17,6 +17,7 @@ import {
   getDoc,
   setDoc,
   // collection,
+  // collection,
   // writeBatch,
   // query,
   // getDocs,
@@ -82,17 +83,18 @@ export const createUserDocumentFromAuth = async (
 
 export const createArticleFromPayload = async (payload) => {
   if (!payload) return;
-  const articleDocRef = doc(db, "articles");
+  const articleDocRef = doc(db, "articles", payload.id);
   try {
     await setDoc(articleDocRef, {
       actor: {
+        id:payload.user.uid,
         description: payload.user.email,
         title: payload.user.displayName,
         date: payload.timestamp,
         image: payload.user.photoURL,
       },
       video: payload.video,
-      sharedImg: payload.downloadURL,
+      sharedImg: payload.downloadURL ? payload.downloadURL : "",
       comments: 0,
       description: payload.description,
     });
