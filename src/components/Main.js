@@ -207,9 +207,8 @@ const SocialActions = styled.div`
     span {
       margin-left: 8px;
       @media (max-width: 768px) {
-        display:none;
+        display: none;
       }
-
     }
 
     img {
@@ -225,12 +224,15 @@ const SharedVideo = styled.div`
   width: 100%;
 `;
 
+const Content = styled.div``;
+
 const Main = () => {
   const currentUser = useSelector(selectCurrentUser);
   const isModalOpen = useSelector(selectIsModalOpen);
 
   const isLoading = useSelector(isArticleLoading);
   const articles = useSelector(selectArticles);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -250,7 +252,9 @@ const Main = () => {
           ) : (
             <img src="/images/user.svg" alt="" />
           )}
-          <button onClick={handleModal}>Start a post</button>
+          <button onClick={handleModal} disabled={isLoading ? true : false}>
+            Start a post
+          </button>
         </div>
         <div>
           <button>
@@ -271,19 +275,17 @@ const Main = () => {
           </button>
         </div>
       </ShareBox>
-      {isLoading && <Spinner/>}
-      {articles.length === 0 ? (
-        <h2>No Articles Found !!!</h2>
-      ) : (
-        articles.map((article, index) => {
-          let formattedDate = new Intl.DateTimeFormat("en-IN", {
-            dateStyle: "full",
-            timeStyle: "long",
-            hour12: true,
-          }).format(article.actor.date);
-          return (
-            <div key={index}>
-              <Article>
+      <Content>
+        {isLoading && <Spinner />}
+        {articles.length > 0 &&
+          articles.map((article, index) => {
+            let formattedDate = new Intl.DateTimeFormat("en-IN", {
+              dateStyle: "full",
+              timeStyle: "long",
+              hour12: true,
+            }).format(article.actor.date);
+            return (
+              <Article key={index}>
                 <SharedActor>
                   <a>
                     <img src={article.actor.image} alt="" />
@@ -307,7 +309,7 @@ const Main = () => {
                 )}
                 {article.video && (
                   <SharedVideo>
-                    <ReactPlayer url={article.video} width={"100%"}/>
+                    <ReactPlayer url={article.video} width={"100%"} />
                   </SharedVideo>
                 )}
                 <SocialCount>
@@ -347,10 +349,10 @@ const Main = () => {
                   </button>
                 </SocialActions>
               </Article>
-            </div>
-          );
-        })
-      )}
+            );
+          })}
+      </Content>
+
       {isModalOpen && <PostModal />}
     </Container>
   );

@@ -209,6 +209,7 @@ const PostModal = (props) => {
     }
     dispatch(postArticleAPI(payload));
     reset(event)
+    dispatch(setIsModalOpen());
   }
 
   const reset = () => {

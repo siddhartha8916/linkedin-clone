@@ -7,8 +7,7 @@ import { useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { isArticlePostSuccess } from "../selectors/articleSelector";
-import { setIsModalOpen } from "../actions/modalActions";
-import { resetArticleLoadingStatus } from "../actions/articleActions";
+import { getArticlesfromAPI, resetArticleLoadingStatus } from "../actions/articleActions";
 
 const Section = styled.section`
   min-height: 25px;
@@ -64,15 +63,14 @@ const Layout = styled.div`
 `;
 
 const Home = () => {
-
-  const dispatch = useDispatch();
+    const dispatch = useDispatch();
   const isArticleSuccess = useSelector(isArticlePostSuccess)
 
   useEffect(() => {
     if (isArticleSuccess) {
       dispatch(resetArticleLoadingStatus())
-      dispatch(setIsModalOpen());
       toast.success("Article Posted Successfully!");
+      dispatch(getArticlesfromAPI());
     }
   }, [isArticleSuccess, dispatch])
   
