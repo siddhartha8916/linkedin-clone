@@ -9,6 +9,7 @@ const Container = styled.div`
   grid-area: leftside;
   @media (max-width: 768px) {
     position:static;
+    align-self:inherit;
   }
 `;
 

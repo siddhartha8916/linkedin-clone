@@ -7,6 +7,7 @@ const Container = styled.div`
   grid-area: rightside;
   @media (max-width: 768px) {
     position:static;
+    align-self:inherit;
   }
 `;
 
