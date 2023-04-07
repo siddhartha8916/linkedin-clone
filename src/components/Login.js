@@ -1,7 +1,9 @@
-import { connect } from "react-redux";
+import { connect, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { signInWithGooglePopup, signOutUser } from "../firebase";
+import { selectCurrentUser } from "../selectors/userSelector";
+import { useEffect } from "react";
 
 const Container = styled.div`
   padding: 0px;
@@ -157,6 +159,15 @@ const SignOut = styled(SignIn)``;
 
 const Login = (props) => {
   const navigate = useNavigate();
+
+  const currentUser = useSelector(selectCurrentUser);
+
+  useEffect(() => {
+    if (currentUser) {
+      navigate("/home");
+    }
+  }, [currentUser, navigate])
+  
 
   const signInWithGoogle = async () => {
     const res = await signInWithGooglePopup();

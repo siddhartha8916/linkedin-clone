@@ -16,11 +16,12 @@ import {
   doc,
   getDoc,
   setDoc,
-  // collection,
+  collection,
   // collection,
   // writeBatch,
-  // query,
-  // getDocs,
+  query,
+  getDocs,
+  orderBy,
 } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 // TODO: Add SDKs for Firebase products that you want to use
@@ -86,6 +87,7 @@ export const createArticleFromPayload = async (payload) => {
   const articleDocRef = doc(db, "articles", payload.id);
   try {
     await setDoc(articleDocRef, {
+      id:payload.id,
       actor: {
         id:payload.user.uid,
         description: payload.user.email,
@@ -106,10 +108,12 @@ export const createArticleFromPayload = async (payload) => {
   }
 };
 
-// const uploadImageFromPayload = async (payload) => {
-//   const storageRef = ref(`images/${payload.image.name}`);
-//   const uploadTask = uploadBytesResumable(storageRef, payload.image);
-// }
+export const fetchArticlesFromFirebase = async() => {
+  const collectionRef = collection(db, "articles");
+  const q = query(collectionRef, orderBy("actor.date","desc"))
+  const querySnapshot = await getDocs(q)
+  return querySnapshot.docs.map(docSnapshot => docSnapshot.data())
+}
 
 export const signOutUser = async () => signOut(auth);
 

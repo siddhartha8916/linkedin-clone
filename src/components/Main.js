@@ -5,6 +5,10 @@ import PostModal from "./PostModal";
 import { setIsModalOpen } from "../actions/modalActions";
 import { selectIsModalOpen } from "../selectors/modalSelector";
 import Spinner from "./Spinner";
+import { useEffect } from "react";
+import { getArticlesfromAPI } from "../actions/articleActions";
+import { isArticleLoading, selectArticles } from "../selectors/articleSelector";
+import ReactPlayer from "react-player";
 
 const Container = styled.div`
   grid-area: main;
@@ -202,6 +206,10 @@ const SocialActions = styled.div`
     }
     span {
       margin-left: 8px;
+      @media (max-width: 768px) {
+        display:none;
+      }
+
     }
 
     img {
@@ -213,23 +221,32 @@ const SocialActions = styled.div`
   }
 `;
 
-
+const SharedVideo = styled.div`
+  width: 100%;
+`;
 
 const Main = () => {
   const currentUser = useSelector(selectCurrentUser);
   const isModalOpen = useSelector(selectIsModalOpen);
+
+  const isLoading = useSelector(isArticleLoading);
+  const articles = useSelector(selectArticles);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getArticlesfromAPI());
+  }, []);
 
   const handleModal = () => {
     dispatch(setIsModalOpen());
-  }
+  };
 
   return (
     <Container>
       <ShareBox>
         <div>
           {currentUser && currentUser.photoURL ? (
-            <img src={currentUser.photoURL} alt=""/>
+            <img src={currentUser.photoURL} alt="" />
           ) : (
             <img src="/images/user.svg" alt="" />
           )}
@@ -254,66 +271,87 @@ const Main = () => {
           </button>
         </div>
       </ShareBox>
-      <div>
-        <Article>
-          <SharedActor>
-            <a>
-              <img src="/images/user.svg" alt="" />
-              <div>
-                <span>Title</span>
-                <span>Info</span>
-                <span>Date</span>
-              </div>
-            </a>
-            <button>
-              <img src="/images/ellipsis.svg" alt="" />
-            </button>
-          </SharedActor>
-          <Description>Description</Description>
-          <SharedImage>
-            <a>
-              <img src="/images/shared-image.jpg" alt="" />
-            </a>
-          </SharedImage>
-          <SocialCount>
-            <li>
-              <button>
-                <img
-                  src="https://static.licdn.com/sc/h/8ekq8gho1ruaf8i7f86vd1ftt"
-                  alt=""
-                />
-                <img
-                  src="https://static.licdn.com/sc/h/b1dl5jk88euc7e9ri50xy5qo8"
-                  alt=""
-                />
-                <span>75</span>
-              </button>
-            </li>
-            <li>
-              <a>2 Comments</a>
-            </li>
-          </SocialCount>
-          <SocialActions>
-            <button>
-              <img src="/images/like.png" alt="" />
-              <span>Like</span>
-            </button>
-            <button>
-              <img src="/images/comment.png" alt="" />
-              <span>Comments</span>
-            </button>
-            <button>
-              <img src="/images/share.png" alt="" />
-              <span>Share</span>
-            </button>
-            <button>
-              <img src="/images/send.png" alt="" />
-              <span>Send</span>
-            </button>
-          </SocialActions>
-        </Article>
-      </div>
-      {isModalOpen && <PostModal/>}
+      {isLoading && <Spinner/>}
+      {articles.length === 0 ? (
+        <h2>No Articles Found !!!</h2>
+      ) : (
+        articles.map((article, index) => {
+          let formattedDate = new Intl.DateTimeFormat("en-IN", {
+            dateStyle: "full",
+            timeStyle: "long",
+            hour12: true,
+          }).format(article.actor.date);
+          return (
+            <div key={index}>
+              <Article>
+                <SharedActor>
+                  <a>
+                    <img src={article.actor.image} alt="" />
+                    <div>
+                      <span>{article.actor.title}</span>
+                      <span>{article.actor.description}</span>
+                      <span>{formattedDate}</span>
+                    </div>
+                  </a>
+                  <button>
+                    <img src="/images/ellipsis.svg" alt="" />
+                  </button>
+                </SharedActor>
+                <Description>{article.description}</Description>
+                {article.sharedImg && (
+                  <SharedImage>
+                    <a>
+                      <img src={article.sharedImg} alt="" />
+                    </a>
+                  </SharedImage>
+                )}
+                {article.video && (
+                  <SharedVideo>
+                    <ReactPlayer url={article.video} width={"100%"}/>
+                  </SharedVideo>
+                )}
+                <SocialCount>
+                  <li>
+                    <button>
+                      <img
+                        src="https://static.licdn.com/sc/h/8ekq8gho1ruaf8i7f86vd1ftt"
+                        alt=""
+                      />
+                      <img
+                        src="https://static.licdn.com/sc/h/b1dl5jk88euc7e9ri50xy5qo8"
+                        alt=""
+                      />
+                      <span>75</span>
+                    </button>
+                  </li>
+                  <li>
+                    <a>{article.comments} Comments</a>
+                  </li>
+                </SocialCount>
+                <SocialActions>
+                  <button>
+                    <img src="/images/like.png" alt="" />
+                    <span>Like</span>
+                  </button>
+                  <button>
+                    <img src="/images/comment.png" alt="" />
+                    <span>Comments</span>
+                  </button>
+                  <button>
+                    <img src="/images/share.png" alt="" />
+                    <span>Share</span>
+                  </button>
+                  <button>
+                    <img src="/images/send.png" alt="" />
+                    <span>Send</span>
+                  </button>
+                </SocialActions>
+              </Article>
+            </div>
+          );
+        })
+      )}
+      {isModalOpen && <PostModal />}
     </Container>
   );
 };

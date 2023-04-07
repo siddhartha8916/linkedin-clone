@@ -1,4 +1,4 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import 'react-toastify/dist/ReactToastify.css';
 import "./App.css";
 import Login from "./components/Login";
@@ -24,6 +24,7 @@ const router = createBrowserRouter([
 
 function App() {
   const dispatch = useDispatch();
+
 
   useEffect(() => {
     const unsubscribe = onAuthStateChangedListener((user) => {

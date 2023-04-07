@@ -3,6 +3,12 @@ import Header from "./Header";
 import LeftSide from "./LeftSide";
 import Main from "./Main";
 import RightSide from "./RightSide";
+import { useEffect } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import { useDispatch, useSelector } from "react-redux";
+import { isArticlePostSuccess } from "../selectors/articleSelector";
+import { setIsModalOpen } from "../actions/modalActions";
+import { resetArticleLoadingStatus } from "../actions/articleActions";
 
 const Section = styled.section`
   min-height: 25px;
@@ -35,6 +41,10 @@ const Container = styled.div`
   padding-top: 52px;
   max-width: 85%;
   margin:auto;
+  @media (max-width: 768px) {
+    width:95%;
+    margin:auto;
+  }
 `;
 
 const Layout = styled.div`
@@ -48,16 +58,29 @@ const Layout = styled.div`
   @media (max-width: 768px) {
     display: flex;
     flex-direction: column;
-    padding: 0 5px;
+    padding: 10px 0px;
+    margin: 0px 0px;
   }
 `;
 
 const Home = () => {
+
+  const dispatch = useDispatch();
+  const isArticleSuccess = useSelector(isArticlePostSuccess)
+
+  useEffect(() => {
+    if (isArticleSuccess) {
+      dispatch(resetArticleLoadingStatus())
+      dispatch(setIsModalOpen());
+      toast.success("Article Posted Successfully!");
+    }
+  }, [isArticleSuccess, dispatch])
   
   return (
     <div>
       <Header />
       <Container>
+      <ToastContainer />
         <Section>
           <h5>
             <a>Hiring in a hurry? -&nbsp;</a>

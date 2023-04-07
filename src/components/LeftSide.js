@@ -3,7 +3,13 @@ import styled from "styled-components";
 import { selectCurrentUser } from "../selectors/userSelector";
 
 const Container = styled.div`
+  position: sticky;
+  top: 80px;
+  align-self:self-start;
   grid-area: leftside;
+  @media (max-width: 768px) {
+    position:static;
+  }
 `;
 
 const ArtCard = styled.div`

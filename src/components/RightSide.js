@@ -1,7 +1,13 @@
 import styled from "styled-components";
 
 const Container = styled.div`
+  position: sticky;
+  top: 80px;
+  align-self:self-start;
   grid-area: rightside;
+  @media (max-width: 768px) {
+    position:static;
+  }
 `;
 
 const FollowCard = styled.div`

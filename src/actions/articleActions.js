@@ -1,6 +1,6 @@
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { createAction } from "../reducers/reducer.utils";
-import { createArticleFromPayload, storage } from "../firebase";
+import { createArticleFromPayload, fetchArticlesFromFirebase, storage } from "../firebase";
 
 export const ARTICLE_ACTION_TYPES = {
   SET_ARTICLE_UPLOAD_START: "SET_ARTICLE_UPLOAD_START",
@@ -9,6 +9,7 @@ export const ARTICLE_ACTION_TYPES = {
   FETCH_ARTICLE_START: "FETCH_ARTICLE_START",
   FETCH_ARTICLE_SUCCESS: "FETCH_ARTICLE_SUCCESS",
   FETCH_ARTICLE_FAIL: "FETCH_ARTICLE_FAIL",
+  RESET_STATUS:"RESET_STATUS"
 };
 
 export function postArticleAPI(payload) {
@@ -63,5 +64,28 @@ export function postArticleAPI(payload) {
         );
       }
     }
+    if (payload.video === "" && payload.image === "") {
+      const res = await createArticleFromPayload(payload);
+      if (res.error) {
+        dispatch(
+          createAction(ARTICLE_ACTION_TYPES.SET_ARTICLE_UPLOAD_FAIL,{error:"Article Uploading Failed"})
+        );
+      } else {
+        dispatch(
+          createAction(ARTICLE_ACTION_TYPES.SET_ARTICLE_UPLOAD_SUCCESS)
+        );
+      }
+    }
   };
 }
+
+export const getArticlesfromAPI = (payload) => {
+  return async (dispatch) => {
+    dispatch(createAction(ARTICLE_ACTION_TYPES.FETCH_ARTICLE_START, null))
+    let payload = await fetchArticlesFromFirebase()
+    dispatch(createAction(ARTICLE_ACTION_TYPES.FETCH_ARTICLE_SUCCESS, payload))
+  }
+}
+
+export const resetArticleLoadingStatus = () =>
+  createAction(ARTICLE_ACTION_TYPES.RESET_STATUS, null);
