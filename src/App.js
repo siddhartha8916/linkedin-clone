@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import 'react-toastify/dist/ReactToastify.css';
+import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
 import Login from "./components/Login";
 import Home from "./components/Home";
@@ -9,22 +9,30 @@ import {
   onAuthStateChangedListener,
 } from "./firebase";
 import { setCurrentUser } from "./actions/userActions";
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import { Navigate, RouterProvider, createBrowserRouter } from "react-router-dom";
+import { selectCurrentUser } from "./selectors/userSelector";
 
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <Login />,
-  },
-  {
-    path: "/home",
-    element: <Home />,
-  },
-]);
+const routes = (isSignedIn) => {
+  console.log(isSignedIn);
+  return [
+    {
+      path: "/",
+      element: <Login />,
+    },
+    {
+      path: "/home",
+      element: isSignedIn ? <Home /> : <Navigate to="/" />,
+    },
+  ];
+};
+
 
 function App() {
   const dispatch = useDispatch();
-
+  
+  const currentUser = useSelector(selectCurrentUser);
+  const router = createBrowserRouter(routes(currentUser));
+  
 
   useEffect(() => {
     const unsubscribe = onAuthStateChangedListener((user) => {
