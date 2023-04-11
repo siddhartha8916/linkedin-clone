@@ -3,6 +3,19 @@ import { useSelector } from "react-redux";
 import styled from "styled-components";
 import { selectCurrentUser } from "../selectors/userSelector";
 
+const messageData = [
+  { id: 1, name: "Siddhartha Kumar", text: "Hi there..." },
+  { id: 2, name: "Shubham Kumar", text: "Hi there..." },
+  { id: 3, name: "Raman Verma", text: "Hi there..." },
+  { id: 4, name: "Tilak Kumar", text: "Hi there..." },
+  { id: 5, name: "Sunaina Kumari", text: "Hi there..." },
+  { id: 6, name: "Radhe Mohan Kumar", text: "Hi there..." },
+  { id: 7, name: "Santosh Rajak", text: "Hi there..." },
+  { id: 8, name: "Motilal Paswan", text: "Hi there..." },
+  { id: 9, name: "Shailesh Kumar", text: "Hi there..." },
+  { id: 10, name: "Saumya Singh", text: "Hi there..." },
+];
+
 const Content = styled.div`
   width: 300px;
   background-color: #fff;
@@ -165,69 +178,15 @@ const Messaging = () => {
       </MessagingTopBar>
       <MessagingContent className={expand ? "is-active" : ""}>
         <MessageContainer>
-          <MessageItem>
-            <img src="/images/user.svg" alt="" />
-            <div>
-              <p>Siddhartha Kumar</p>
-              <p>Siddhartha: Hi...</p>
-            </div>
-          </MessageItem>
-          <MessageItem>
-            <img src="/images/user.svg" alt="" />
-            <div>
-              <p>Siddhartha Kumar</p>
-              <p>Siddhartha: Hi...</p>
-            </div>
-          </MessageItem>
-          <MessageItem>
-            <img src="/images/user.svg" alt="" />
-            <div>
-              <p>Siddhartha Kumar</p>
-              <p>Siddhartha: Hi...</p>
-            </div>
-          </MessageItem>
-          <MessageItem>
-            <img src="/images/user.svg" alt="" />
-            <div>
-              <p>Siddhartha Kumar</p>
-              <p>Siddhartha: Hi...</p>
-            </div>
-          </MessageItem>
-          <MessageItem>
-            <img src="/images/user.svg" alt="" />
-            <div>
-              <p>Siddhartha Kumar</p>
-              <p>Siddhartha: Hi...</p>
-            </div>
-          </MessageItem>
-          <MessageItem>
-            <img src="/images/user.svg" alt="" />
-            <div>
-              <p>Siddhartha Kumar</p>
-              <p>Siddhartha: Hi...</p>
-            </div>
-          </MessageItem>
-          <MessageItem>
-            <img src="/images/user.svg" alt="" />
-            <div>
-              <p>Siddhartha Kumar</p>
-              <p>Siddhartha: Hi...</p>
-            </div>
-          </MessageItem>
-          <MessageItem>
-            <img src="/images/user.svg" alt="" />
-            <div>
-              <p>Siddhartha Kumar</p>
-              <p>Siddhartha: Hi...</p>
-            </div>
-          </MessageItem>
-          <MessageItem>
-            <img src="/images/user.svg" alt="" />
-            <div>
-              <p>Siddhartha Kumar</p>
-              <p>Siddhartha: Hi...</p>
-            </div>
-          </MessageItem>
+          {messageData.map((item) => (
+            <MessageItem key={item.id}>
+              <img src={`https://xsgames.co/randomusers/assets/avatars/male/${item.id}.jpg`} alt="" />
+              <div>
+                <p>{item.name}</p>
+                <p>{item.name}: {item.text}</p>
+              </div>
+            </MessageItem>
+          ))}
         </MessageContainer>
       </MessagingContent>
     </Content>
