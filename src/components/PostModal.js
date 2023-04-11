@@ -1,13 +1,11 @@
 import styled from "styled-components";
 import ReactDOM from "react-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { setIsModalOpen } from "../actions/modalActions";
+import { setIsPostModalOpen } from "../actions/modalActions";
 import { useState } from "react";
 import { selectCurrentUser } from "../selectors/userSelector";
 import ReactPlayer from "react-player";
 import { postArticleAPI, resetArticleLoadingStatus } from "../actions/articleActions";
-import {  isArticlePostSuccess } from "../selectors/articleSelector";
-import { useEffect } from "react";
 
 const Container = styled.div`
   position: fixed;
@@ -209,7 +207,7 @@ const PostModal = (props) => {
     }
     dispatch(postArticleAPI(payload));
     reset(event)
-    dispatch(setIsModalOpen());
+    dispatch(setIsPostModalOpen());
   }
 
   const reset = () => {
@@ -223,7 +221,7 @@ const PostModal = (props) => {
     setEditorText("");
     setShareImage("");
     dispatch(resetArticleLoadingStatus())
-    dispatch(setIsModalOpen());
+    dispatch(setIsPostModalOpen());
   };
 
   const handleFileInputChange = (e) => {

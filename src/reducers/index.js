@@ -1,11 +1,12 @@
 import { combineReducers } from "redux";
 import { userReducer } from "./userReducer";
-import { modalReducer } from "./modalReducer";
+import { inlineModalReducer, postModalReducer } from "./modalReducer";
 import { articleReducer } from "./articleReducer";
 
 export const rootReducer = combineReducers({
   user: userReducer,
-  modal:modalReducer,
+  postModal:postModalReducer,
+  inlineModal:inlineModalReducer,
   article:articleReducer
 });
  

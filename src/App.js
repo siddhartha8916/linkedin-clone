@@ -9,11 +9,14 @@ import {
   onAuthStateChangedListener,
 } from "./firebase";
 import { setCurrentUser } from "./actions/userActions";
-import { Navigate, RouterProvider, createBrowserRouter } from "react-router-dom";
+import {
+  Navigate,
+  RouterProvider,
+  createBrowserRouter,
+} from "react-router-dom";
 import { selectCurrentUser } from "./selectors/userSelector";
 
 const routes = (isSignedIn) => {
-  console.log(isSignedIn);
   return [
     {
       path: "/",
@@ -21,18 +24,17 @@ const routes = (isSignedIn) => {
     },
     {
       path: "/home",
-      element: isSignedIn ? <Home /> : <Navigate to="/" />,
+      // element: isSignedIn ? <Home /> : <Navigate to="/" />,
+      element: <Home />,
     },
   ];
 };
 
-
 function App() {
   const dispatch = useDispatch();
-  
+
   const currentUser = useSelector(selectCurrentUser);
   const router = createBrowserRouter(routes(currentUser));
-  
 
   useEffect(() => {
     const unsubscribe = onAuthStateChangedListener((user) => {

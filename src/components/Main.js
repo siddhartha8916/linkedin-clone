@@ -2,9 +2,13 @@ import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { selectCurrentUser } from "../selectors/userSelector";
 import PostModal from "./PostModal";
-import { setIsModalOpen } from "../actions/modalActions";
-import { selectIsModalOpen } from "../selectors/modalSelector";
+import {
+  setIsInlineModalOpen,
+  setIsPostModalOpen,
+} from "../actions/modalActions";
+import { selectIsPostModalOpen } from "../selectors/modalSelector";
 import Spinner from "./Spinner";
+import InlineModal from "./InlineModal";
 import { useEffect } from "react";
 import { getArticlesfromAPI } from "../actions/articleActions";
 import { isArticleLoading, selectArticles } from "../selectors/articleSelector";
@@ -12,6 +16,7 @@ import ReactPlayer from "react-player";
 
 const Container = styled.div`
   grid-area: main;
+  position: relative;
 `;
 
 const CommonCard = styled.div`
@@ -31,6 +36,7 @@ const ShareBox = styled(CommonCard)`
   color: #958b7b;
   margin: 0 0 8px;
   background: white;
+  position: relative;
   div {
     button {
       outline: none;
@@ -126,11 +132,22 @@ const SharedActor = styled.div`
 
   button {
     position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     right: 12px;
     top: 8px;
+    width: 35px;
+    height: 35px;
     background: transparent;
     border: none;
+    border-radius: 100%;
     outline: none;
+    transition: all 116ms linear;
+    &:hover {
+      border-radius: 100%;
+      background-color: rgba(0, 0, 0, 0.08);
+    }
   }
 `;
 
@@ -224,11 +241,13 @@ const SharedVideo = styled.div`
   width: 100%;
 `;
 
-const Content = styled.div``;
+const Content = styled.div`
+  position: relative;
+`;
 
 const Main = () => {
   const currentUser = useSelector(selectCurrentUser);
-  const isModalOpen = useSelector(selectIsModalOpen);
+  const isModalOpen = useSelector(selectIsPostModalOpen);
 
   const isLoading = useSelector(isArticleLoading);
   const articles = useSelector(selectArticles);
@@ -240,7 +259,14 @@ const Main = () => {
   }, []);
 
   const handleModal = () => {
-    dispatch(setIsModalOpen());
+    dispatch(setIsPostModalOpen());
+  };
+
+  const handleInlineModal = (event) => {
+    const rect = event.target.parentNode.parentNode.parentNode;
+    const topPos = `${rect.offsetTop + 50}`;
+    const leftPos = `${rect.left}`;
+    dispatch(setIsInlineModalOpen({ topPos, leftPos }));
   };
 
   return (
@@ -277,6 +303,8 @@ const Main = () => {
       </ShareBox>
       <Content>
         {isLoading && <Spinner />}
+        <InlineModal />
+
         {articles.length > 0 &&
           articles.map((article, index) => {
             let formattedDate = new Intl.DateTimeFormat("en-IN", {
@@ -295,7 +323,7 @@ const Main = () => {
                       <span>{formattedDate}</span>
                     </div>
                   </a>
-                  <button>
+                  <button onClick={handleInlineModal}>
                     <img src="/images/ellipsis.svg" alt="" />
                   </button>
                 </SharedActor>
