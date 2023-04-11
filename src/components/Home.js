@@ -8,6 +8,7 @@ import { ToastContainer, toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { isArticlePostSuccess } from "../selectors/articleSelector";
 import { getArticlesfromAPI, resetArticleLoadingStatus } from "../actions/articleActions";
+import Messaging from "./Messaging";
 
 const Section = styled.section`
   min-height: 25px;
@@ -94,6 +95,7 @@ const Home = () => {
           <RightSide />
         </Layout>
       </Container>
+      <Messaging/>
     </div>
   );
 };

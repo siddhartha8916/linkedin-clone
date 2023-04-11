@@ -188,6 +188,7 @@ const Header = () => {
   const signOutUserHandler = async () => {
     await signOutUser();
     navigate("/");
+    window.location.reload()
   }
 
   return (
