@@ -2,28 +2,26 @@ import React from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 import {
-  selectInlineModalLeftPosition,
   selectInlineModalTopPosition,
   selectIsInlineModalOpen,
 } from "../selectors/modalSelector";
 
 const Content = styled.div`
-  width: 300px;
+  width: 280px;
   max-height: 400px;
   background-color: #fff;
   text-align: left;
   overflow-x: hidden;
-  overflow-y: scroll;
   border-radius: 5px;
   position: absolute;
   display: ${({ isInlineModalOpen }) =>
     `${isInlineModalOpen ? "block" : "none"}`};
   top: ${({ topPos }) => `${topPos}px`};
-  right: 30px;
+  right: 8px;
   z-index: 10;
   margin: 0 auto;
   box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.15), 0 6px 9px rgba(0, 0, 0, 0.2);
-  &::-webkit-scrollbar {
+  /* &::-webkit-scrollbar {
     width: 5px;
     border-radius: 0px 5px 5px 0px;
   }
@@ -37,7 +35,7 @@ const Content = styled.div`
   }
   &::-webkit-scrollbar-thumb:hover {
     background: #555;
-  }
+  } */
 `;
 
 const ItemListContainer = styled.ul`
@@ -71,13 +69,11 @@ const ListItems = styled.li`
 
 const InlineModal = () => {
   const topPos = useSelector(selectInlineModalTopPosition);
-  const leftPos = useSelector(selectInlineModalLeftPosition);
   const isInlineModalOpen = useSelector(selectIsInlineModalOpen);
 
   return (
     <Content
       topPos={topPos}
-      leftPos={leftPos}
       isInlineModalOpen={isInlineModalOpen}
     >
       <ItemListContainer>
