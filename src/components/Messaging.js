@@ -119,17 +119,27 @@ const MessageContainer = styled.ul`
 
 const MessageItem = styled.li`
   color: rgba(0, 0, 0, 0.8);
-  font-size: 14px;
+  font-size: 12px;
   padding: 10px;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   transition: all 0.1s linear;
   cursor: pointer;
   img {
     width: 48px;
     margin-right: 10px;
     border-radius: 50%;
+    
   }
+  span{
+    
+    border-radius:50%;
+    border:3px solid #fff;
+    padding:0;
+    outline:0;
+    margin:0;
+
+    }
   &:hover {
     background-color: rgba(0, 0, 0, 0.08);
   }
@@ -181,6 +191,7 @@ const Messaging = () => {
           {messageData.map((item) => (
             <MessageItem key={item.id}>
               <img src={`https://xsgames.co/randomusers/assets/avatars/male/${item.id}.jpg`} alt="" />
+              <span>&#128994;</span>
               <div>
                 <p>{item.name}</p>
                 <p>{item.name}: {item.text}</p>

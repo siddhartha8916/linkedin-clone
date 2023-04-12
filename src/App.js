@@ -24,8 +24,7 @@ const routes = (isSignedIn) => {
     },
     {
       path: "/home",
-      // element: isSignedIn ? <Home /> : <Navigate to="/" />,
-      element: <Home />,
+      element: isSignedIn ? <Home /> : <Navigate to="/" />,
     },
   ];
 };
